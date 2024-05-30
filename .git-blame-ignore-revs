@@ -3,3 +3,6 @@
 
 # Remove trailing whitespaces from src/exptimecalc.c
 e67b4454c23d049ff7cba9b9f7d329060f4ad561
+
+# Autoformat src/exptimecalc.c by clang-format to GNU style
+2cebc8b3aedac9a43a0bdf18af9455ce7c79f91e
