@@ -51,18 +51,18 @@
 #define WFE_INPUT
 
 /* Thermal background margin factor -- should be >=1 */
-#define THERMAL_MARGIN_FACTOR 1.00
+const float THERMAL_MARGIN_FACTOR = 1.00;
 
 /* Minimum S/N per band for a shape measurement */
-#define WL_SNR_MIN 18.0
+const float WL_SNR_MIN = 18.0;
 
 /* --- CONSTANTS ASSOCIATED WITH OUTPUT THAT WE DO NOT REPEAT FOR EACH USER INPUT --- */
 
 /* Reference galaxy size for BAO outputs */
-#define R12_REF 0.3
+const float R12_REF = 0.3;
 
 /* Spacing of output redshifts */
-#define DZ_OUT 0.05
+const float DZ_OUT = 0.05;
 
 /* Detector parameters -- NEW in v9.
  *
@@ -78,43 +78,43 @@ double T_FRAME;         /* Time to read out each frame, in seconds              
 double VAR_READ_FRAME;  /* Read noise variance per frame (e-2) -- roughly cdsnoise^2/2   */
 
 /* H alpha rest wavelength in vacuum (microns) */
-#define LAMBDA0_HA 0.6565
+const float LAMBDA0_HA 0.6565;
 /* [O III] rest wavelength in vacuum (microns) */
-#define LAMBDA0_OIII 0.5009
+const float LAMBDA0_OIII 0.5009;
 /* [O III] doublet intensity ratio */
-#define OIII_RATIO 3.0
+const float OIII_RATIO 3.0;
 /* [O II] rest wavelength in vacuum (microns) */
-#define LAMBDA0_OII 0.3728
+const float LAMBDA0_OII 0.3728;
 
 /* Cosmological parameters (this code assumes Lambda CDM).
  * H0 in km/s/Mpc
  */
-#define COSMO_H0 71.903
-#define COSMO_OMEGA_M 0.25648
+const float COSMO_H0 71.903;
+const float COSMO_OMEGA_M 0.25648;
 
 /* Ratio of half-light to scale radius for exponential profile galaxy */
-#define RAT_HL_SL_EXP 1.67834
+const float RAT_HL_SL_EXP 1.67834;
 
 /* Conversions */
-#define METERS_PER_MPC 3.08567802e22
-#define SQDEG_PER_SR 3.282806350011744293e3
+const float METERS_PER_MPC = 3.08567802e22;
+const float SQDEG_PER_SR = 3.282806350011744293e3;
 
 /* Setp sizes for galaxy profile integrals: need more accuracy for WL than BAO */
 #ifdef BAO_OR_SPCONT_MODE
-#define DELTA_STEP 0.0025
+const float DELTA_STEP=0.0025;
 #endif
 #ifdef WL_MODE
-#define DELTA_STEP 0.0005
+const float DELTA_STEP=0.0005;
 #endif
 
 /* Smearing of galaxy size due to spectral dispersion -- sigma on 1 axis in arcsec */
-#define SIGMA_PROF 0.040
+const float SIGMA_PROF = 0.040;
 
 #ifdef NO_OBJ_CONTINUUM
-#define EWD_REF 1e12
+const float EWD_REF = 1e12;
 #else
 /* Reference equivalent width in arcsec -- 100A EW rest frame @ D_theta = 240 arcsec. */
-#define EWD_REF 3.656
+const float EWD_REF = 3.656;
 #endif
 
 /* PSF attributes structure */
@@ -135,7 +135,7 @@ PSF_DATA;
  * Definition of throughput curve is via linear interpolation, constants if
  * off the end of the curve.
  */
-#define N_THROUGHPUT_MAX 512
+const int N_THROUGHPUT_MAX = 512;
 typedef struct {
   int N;                               /* Number of points in interpolation grid */
   double lambda[N_THROUGHPUT_MAX];     /* Wavelengths (in microns) of nodes */
@@ -545,7 +545,7 @@ double get_MTF(double u, double v, PSF_DATA *psf) {
   /* Monochromatic PSFs can simply be returned using get_MTF_mono. */
   if (psf->is_broadband==0) return(get_MTF_mono(u,v,psf));
 
-#define N_LAMBDA_INTEG 12
+const int N_LAMBDA_INTEG = 12;
   psf2.pixscale = psf->pixscale;
   psf2.sigma = psf->sigma;
   psf2.centobs = psf->centobs;
@@ -1545,7 +1545,7 @@ double get_n_Detectable(double z, double FHa, PSF_DATA *psf, double var_1exp, do
 double get_n_galaxies(double z, PSF_DATA *psf, double var_1exp, double calib_1exp,
   int N_exp, double significance_cut, int model, double *stats) {
 
-#define NBIN 215
+const int NBIN = 215;
   int k;
   double ngal, thisn[NBIN];
   double Fmin, dlnF, r, dr;
@@ -1632,9 +1632,9 @@ double get_dNdA_WL_gal2(double reffmin, double reffmax, double zmin, double zmax
   double calib_1exp, double max_ellip_err, double *dNeffdA, char OutFile[], char outmode) {
 
   /* Maximum number of wavelength points allowed in galaxy SEDs */
-#define NWMAX 256
+const int NWMAX = 256;
   /* Number of effective radius sub-bins */
-#define NRBINS 100
+const int NRBINS = 100;
 
   char InfoLine[512];
   FILE *fp, *fq;
