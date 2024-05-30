@@ -192,19 +192,19 @@ void wait_for_user(void) {
 double getJ0(double x) {
   double f,t,u;
   int i;
-  
+
   x = fabs(x);
-  
+
   /* Large value - Abramowitz & Stegun */
   if (x>3) {
     u=3./x;
     f = 0.79788456 - 0.00000077*u - 0.00552740*u*u - 0.00009512*u*u*u
        + u*u*u*u*(0.00137234-0.00072805*u+0.00014476*u*u);
     t = x - 0.78539816 - 0.04166397*u - 0.00003954*u*u + 0.00262573*u*u*u
-       + u*u*u*u*(-0.00054125 -0.00029333*u +0.00013558*u*u);  
+       + u*u*u*u*(-0.00054125 -0.00029333*u +0.00013558*u*u);
     return(f/sqrt(x)*cos(t));
   }
-    
+
   /* Small value - Abramowitz & Stegun */
   f = 0.;
   for(i=0;i<50;i++) f+=cos(x*cos((i+0.5)*M_PI/50.));
@@ -214,10 +214,10 @@ double getJ0(double x) {
 double getJ1(double x) {
   double f,t,u,s;
   int i;
-  
+
   /* Flip sign for negative values */
-  s=1; if (x<0) {x=-x; s=-1;} 
-  
+  s=1; if (x<0) {x=-x; s=-1;}
+
   /* Large value - Abramowitz & Stegun */
   if (x>3) {
     u=3./x;
@@ -227,11 +227,11 @@ double getJ1(double x) {
        + u*u*u*u*(0.00074348 + 0.00079824*u - 0.00029166*u*u);
     return(s*f/sqrt(x)*cos(t));
   }
-  
+
   /* Small value - Abramowitz & Stegun */
   f = 0.;
   for(i=0;i<50;i++) f+=cos(x*sin((i+0.5)*M_PI/50.)-((i+0.5)*M_PI/50.));
-  return(0.02*s*f);  
+  return(0.02*s*f);
 }
 
 /* Error function */
@@ -406,7 +406,7 @@ double get_MTF_mono(double u, double v, PSF_DATA *psf) {
   vpabs = fabs(v*psf->pixscale);
   kxabs = M_PI*upabs;
   kyabs = M_PI*vpabs;
-  
+
   /* Pixel transfer: a product of two sincs */
   T_pix = (kxabs<1e-6? 1.-kxabs*kxabs/6.: sin(kxabs)/kxabs)
          *(kyabs<1e-6? 1.-kyabs*kyabs/6.: sin(kyabs)/kyabs);
@@ -427,7 +427,7 @@ double get_MTF_mono(double u, double v, PSF_DATA *psf) {
 
   /* Wave number as a function of the cutoff at outer diameter */
   k1 = sqrt(u*u+v*v)*psf->lD;
- 
+
   /* The method is that we want the fraction of the area of an annulus of
    * inner radius Dc and outer radius 1 that overlaps with a version of
    * itself that is translated by 2*k1. This can be thought of as having
@@ -443,12 +443,12 @@ double get_MTF_mono(double u, double v, PSF_DATA *psf) {
    * by 2*k1.
    */
   gt_out = k1<1? 2.*( acos(k1) - k1*sqrt(1-k1*k1)): 0;
-  
+
   /* Area of inner circle that overlaps itself after translation by 2*k1.
    */
   k2 = k1/Dc;
   gt_in = Ac * ( k2<1? 2.*( acos(k2) - k2*sqrt(1-k2*k2)): 0 );
-  
+
   /* Cross-term between inner and outer circles.
    * Need area of sector bounded by circles of radii 1 (center: O) and Dc
    * (center: O') with separation O-O' equal to 2*k1.
@@ -459,7 +459,7 @@ double get_MTF_mono(double u, double v, PSF_DATA *psf) {
    * each other entirely, in which case P and P' do not exist).
    */
   cosbeta = (-4*k1*k1 + 1 + Ac) / (2.*Dc);
-  if (cosbeta>=1) {  
+  if (cosbeta>=1) {
     /* The inner circle is inside the outer circle: overlap area is pi*Ac. */
     gt_x = M_PI*Ac;
   } else
@@ -589,7 +589,7 @@ double get_gal_fracE(double r, double reff, PSF_DATA *psf) {
   if (kmax*r<1) {
     dk = 0.005*kmax;
   } else {
-    dk = 0.005/r;  
+    dk = 0.005/r;
   }
   ndk = (long)ceil(kmax/dk);
   dk = kmax/ndk;
@@ -609,7 +609,7 @@ double get_gal_fracE(double r, double reff, PSF_DATA *psf) {
     }
   }
   I *= dk*r/(double)nphi;
-      
+
   return(I);
 }
 
@@ -621,14 +621,14 @@ double get_gal_fracE(double r, double reff, PSF_DATA *psf) {
  */
 double get_gal_size(double eFrac, double reff, PSF_DATA *psf) {
   double r, ratio;
-     
+
   r=0.2; ratio=0.5;
   while(get_gal_fracE(r,reff,psf)>eFrac && r<206265) r/=exp(ratio);
   while(get_gal_fracE(r,reff,psf)<eFrac && r>1e-6) r*=exp(ratio);
-  
+
   for(ratio=0.5; ratio>1e-7; ratio/=2.)
     r *= get_gal_fracE(r,reff,psf)>eFrac? exp(-ratio): exp(ratio);
- 
+
   return(r);
 }
 
@@ -742,7 +742,7 @@ double get_gal_thetaeff(double reff, PSF_DATA *psf) {
   /* Get exponential scale length */
   rs = reff/RAT_HL_SL_EXP;
 
-  /* Get maximum wavevector and integration step */  
+  /* Get maximum wavevector and integration step */
   kmax = 1./psf->lD;
   if (psf->sigma*kmax>6) kmax=6./psf->sigma;
   if (rs*kmax>25) kmax=25/rs;
@@ -1030,7 +1030,7 @@ double get_maglim_shape_noSNRcut(double r_eff, PSF_DATA *psf, int N_exp, double 
 /* Comoving distance in Mpc */
 double computeDistance(double z) {
   double r, ztemp, y;
-  
+
   r=0;
   for(ztemp=0.0005*z; ztemp<z; ztemp+=0.001*z) {
     y = 1.+ztemp;
@@ -1417,7 +1417,7 @@ double get_SNR_boost_factor(double z, double reff, double NII_Ha, PSF_DATA *psf)
   dk = kmax/ndk;
   nphi = 9;
   dphi = M_PI/(double)nphi;
-   
+
   /* The actual integration: outer loop over k, inner loop over angle */
   I1 = I2 = 0;
   for(j=0;j<ndk;j++) {
@@ -1539,7 +1539,7 @@ double get_n_Detectable(double z, double FHa, PSF_DATA *psf, double var_1exp, do
  *
  * Output units are Mpc^-3.
  * Input units: FHa (W/m2), var_1exp(e-^2/pix), calib_1exp(e- per W/m^2)
- *  
+ *
  * Here "detectable" means above threshold -- does not count losses due to bright stars etc.
  */
 double get_n_galaxies(double z, PSF_DATA *psf, double var_1exp, double calib_1exp,
@@ -1920,18 +1920,18 @@ double get_zodi_bkgnd(double ecl_lat, double ecl_dlon, double lambda_min, double
    * V band (550 nm) is SolarSpec[54]
    */
   double SolarSpec[] = {
-    1.87138e-01, 2.61360e-01, 4.08020e-01, 6.22197e-01, 9.02552e-01, 1.51036e+00, 2.25890e+00, 2.75901e+00, 4.03384e+00, 5.42817e+00, 
-    7.26182e+00, 1.01910e+01, 2.01114e+01, 3.62121e+01, 4.31893e+01, 5.43904e+01, 4.91581e+01, 4.95091e+01, 4.95980e+01, 5.93722e+01, 
-    5.27380e+01, 1.02502e+02, 1.62682e+02, 2.53618e+02, 2.01084e+02, 2.08273e+02, 4.05163e+02, 5.39830e+02, 5.31917e+02, 6.31200e+02, 
-    7.06134e+02, 8.13653e+02, 1.00508e+03, 9.56536e+02, 9.50568e+02, 9.82400e+02, 1.06093e+03, 1.12669e+03, 1.09922e+03, 1.10224e+03, 
-    1.36831e+03, 1.72189e+03, 1.74884e+03, 1.59871e+03, 1.74414e+03, 1.98823e+03, 2.02743e+03, 2.00367e+03, 2.03584e+03, 1.90296e+03, 
-    1.93097e+03, 1.86594e+03, 1.86655e+03, 1.87957e+03, 1.87978e+03, 1.83915e+03, 1.84447e+03, 1.80371e+03, 1.76779e+03, 1.70796e+03, 
-    1.66589e+03, 1.61456e+03, 1.53581e+03, 1.51269e+03, 1.44957e+03, 1.39215e+03, 1.34031e+03, 1.28981e+03, 1.24501e+03, 1.19548e+03, 
-    1.15483e+03, 1.10546e+03, 1.06171e+03, 9.94579e+02, 9.54006e+02, 9.15287e+02, 8.63891e+02, 8.31183e+02, 7.95761e+02, 7.62568e+02, 
-    7.27589e+02, 6.94643e+02, 6.60883e+02, 6.21830e+02, 5.83846e+02, 5.59624e+02, 5.34124e+02, 5.06171e+02, 4.80985e+02, 4.63139e+02, 
-    4.39482e+02, 4.13122e+02, 3.94543e+02, 3.75591e+02, 3.56069e+02, 3.35294e+02, 3.16374e+02, 2.98712e+02, 2.82737e+02, 2.69581e+02, 
-    2.49433e+02, 2.36936e+02, 2.21403e+02, 2.04770e+02, 1.87379e+02, 1.75880e+02, 1.60408e+02, 1.46210e+02, 1.36438e+02, 1.24412e+02, 
-    1.16500e+02, 1.07324e+02, 9.89669e+01, 9.12134e+01, 8.28880e+01, 7.71064e+01, 7.06245e+01, 6.42367e+01, 5.87697e+01, 5.39387e+01, 
+    1.87138e-01, 2.61360e-01, 4.08020e-01, 6.22197e-01, 9.02552e-01, 1.51036e+00, 2.25890e+00, 2.75901e+00, 4.03384e+00, 5.42817e+00,
+    7.26182e+00, 1.01910e+01, 2.01114e+01, 3.62121e+01, 4.31893e+01, 5.43904e+01, 4.91581e+01, 4.95091e+01, 4.95980e+01, 5.93722e+01,
+    5.27380e+01, 1.02502e+02, 1.62682e+02, 2.53618e+02, 2.01084e+02, 2.08273e+02, 4.05163e+02, 5.39830e+02, 5.31917e+02, 6.31200e+02,
+    7.06134e+02, 8.13653e+02, 1.00508e+03, 9.56536e+02, 9.50568e+02, 9.82400e+02, 1.06093e+03, 1.12669e+03, 1.09922e+03, 1.10224e+03,
+    1.36831e+03, 1.72189e+03, 1.74884e+03, 1.59871e+03, 1.74414e+03, 1.98823e+03, 2.02743e+03, 2.00367e+03, 2.03584e+03, 1.90296e+03,
+    1.93097e+03, 1.86594e+03, 1.86655e+03, 1.87957e+03, 1.87978e+03, 1.83915e+03, 1.84447e+03, 1.80371e+03, 1.76779e+03, 1.70796e+03,
+    1.66589e+03, 1.61456e+03, 1.53581e+03, 1.51269e+03, 1.44957e+03, 1.39215e+03, 1.34031e+03, 1.28981e+03, 1.24501e+03, 1.19548e+03,
+    1.15483e+03, 1.10546e+03, 1.06171e+03, 9.94579e+02, 9.54006e+02, 9.15287e+02, 8.63891e+02, 8.31183e+02, 7.95761e+02, 7.62568e+02,
+    7.27589e+02, 6.94643e+02, 6.60883e+02, 6.21830e+02, 5.83846e+02, 5.59624e+02, 5.34124e+02, 5.06171e+02, 4.80985e+02, 4.63139e+02,
+    4.39482e+02, 4.13122e+02, 3.94543e+02, 3.75591e+02, 3.56069e+02, 3.35294e+02, 3.16374e+02, 2.98712e+02, 2.82737e+02, 2.69581e+02,
+    2.49433e+02, 2.36936e+02, 2.21403e+02, 2.04770e+02, 1.87379e+02, 1.75880e+02, 1.60408e+02, 1.46210e+02, 1.36438e+02, 1.24412e+02,
+    1.16500e+02, 1.07324e+02, 9.89669e+01, 9.12134e+01, 8.28880e+01, 7.71064e+01, 7.06245e+01, 6.42367e+01, 5.87697e+01, 5.39387e+01,
     4.98208e+01
   };
 
@@ -2160,7 +2160,7 @@ double getNoiseTotal(double t_exp, double ct, double rnfloor, int mode) {
       if (mode==1)
         varRead += rnfloor*rnfloor;
       if (mode==2)
-        varRead = varRead>rnfloor*rnfloor? varRead: rnfloor*rnfloor;     
+        varRead = varRead>rnfloor*rnfloor? varRead: rnfloor*rnfloor;
       return(varRead + varPoisson);
       break;
 
@@ -2686,7 +2686,7 @@ int main(void) {
   if (filterthroughput<=0 || filterthroughput>1.00000000001) {
     fprintf(stderr, "Error: filter throughput %12.5lE is illegal.\n", filterthroughput);
     wait_for_user();
-    exit(1);   
+    exit(1);
   }
 #endif
 #ifdef SPCONT_MODE
@@ -2695,7 +2695,7 @@ int main(void) {
   if (filterthroughput<=0 || filterthroughput>1.00000000001) {
     fprintf(stderr, "Error: filter throughput %12.5lE is illegal.\n", filterthroughput);
     wait_for_user();
-    exit(1);   
+    exit(1);
   }
   if (filterthroughput<0.9 || filterthroughput>0.99) {
     fprintf(stderr, "Warning: filter throughput %12.5lE is unusual.\n", filterthroughput);
@@ -3168,7 +3168,7 @@ int main(void) {
     psf.rmswfe = rmswfe_um / lambda;
     if (is_use_wavefront) psf.rmswfe = get_rmswfe_from_fcn(lambda,&wavefront)/lambda;
 
-    /* Set up calibration parameters: e- per exposure per W/m^2   
+    /* Set up calibration parameters: e- per exposure per W/m^2
      * Note 1 joule = 5.03411747e18*lambda(um) photons
      * This accounts for Galactic extinction.
      */
@@ -3358,7 +3358,7 @@ int main(void) {
   printf("                          = %12.5lE gal/arcmin^2\n", ntot/3600.);
   printf("Weak lensing n_eff:         %12.5lE gal/deg^2\n", nefftot);
   printf("                          = %12.5lE gal/arcmin^2\n", nefftot/3600.);
-  
+
 #endif
 
   wait_for_user();
