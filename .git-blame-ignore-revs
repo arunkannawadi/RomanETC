@@ -1,0 +1,5 @@
+# Run this command to always ignore formatting commits in `git blame`
+# git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Remove trailing whitespaces from src/exptimecalc.c
+e67b4454c23d049ff7cba9b9f7d329060f4ad561
