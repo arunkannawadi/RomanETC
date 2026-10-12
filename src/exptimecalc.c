@@ -3532,7 +3532,7 @@ for (z = DZ_OUT; z < lambda_max / LAMBDA0_HA - 1; z += DZ_OUT)
     if (z > lambda_min / LAMBDA0_HA - 1)
 #endif
         {
-            /* Get the wavelength of H alpha at this redshift */
+        /* Get the wavelength of H alpha at this redshift */
 #ifdef OIII_GAL
             lambda = (1. + z) * LAMBDA0_OIII;
 #elif OII_GAL
@@ -3581,7 +3581,7 @@ for (z = DZ_OUT; z < lambda_max / LAMBDA0_HA - 1; z += DZ_OUT)
                                  significance_cut),
                     nbar, nbar * computeDistance (z) * computeDistance (z) / computeHubble (z) / SQDEG_PER_SR,
                     stats[0], stats[1], stats[2], stats[3], calib_1exp * 1e-19);
-            /* Sum up integrals over redshift */
+        /* Sum up integrals over redshift */
 #ifdef OIII_GAL
             dz = (z + 0.5 * DZ_OUT > lambda_max / LAMBDA0_OIII - 1 ? lambda_max / LAMBDA0_OIII - 1
                                                                    : z + 0.5 * DZ_OUT)
